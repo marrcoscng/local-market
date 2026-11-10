@@ -6,7 +6,7 @@ import jakarta.persistence.Persistence;
 
 public class JPAUtil {
 
-    public static EntityManager getEntityManager() throws RuntimeException {
+    public static EntityManager getEntityManager() {
             EntityManagerFactory Factory = Persistence.createEntityManagerFactory("marcos");
             return Factory.createEntityManager();
     }

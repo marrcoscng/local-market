@@ -1,13 +1,13 @@
 package br.com.market;
 
 import br.com.market.controller.ProductController;
-
-import br.com.market.exceptions.RegisteredAlreadyProductException;
+import br.com.market.exceptions.ProductNotRegisterException;
 import br.com.market.model.Product;
 import br.com.market.model.productCategory;
 import br.com.market.service.ProductService;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class Main{
     public static void main(String[] args){
@@ -17,9 +17,18 @@ public class Main{
         try {
             ProductService productService = new ProductService();
             ProductController productController = new ProductController(productService);
-            productController.save(product);
+            Optional<Product> prod = productController.findProductById(5L);
+            if(prod.isEmpty()){
+                System.out.println("Product is Null");
+            }else{
+                System.out.println(prod.get());
+                productController.deleteById(4L);
+                System.err.println("Success");
+            }
             System.out.println("Code executed with success");
-        }catch(RegisteredAlreadyProductException e){
+            productController.deleteById(4L);
+
+        }catch(ProductNotRegisterException e){
             System.out.println(e.getMessage());
         }
 
