@@ -35,11 +35,11 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private productCategory productCategory;
+    private ProductCategory productCategory;
 
     public Product(){}
 
-    public Product(String name, String barcode, BigDecimal price, BigDecimal constPrice, Integer stockQuantity, productCategory productCategory){
+    public Product(String name, String barcode, BigDecimal price, BigDecimal constPrice, Integer stockQuantity, ProductCategory productCategory){
         setName(name);
         this.barcode = barcode;
         this.price = price;
@@ -54,7 +54,7 @@ public class Product {
                 "Name: %s%n"+
                 "BarCode: %s%n"+
                 "Price: %.2f%n"+
-                "productCategory: %s%n",name,barcode,price, productCategory);
+                "ProductCategory: %s%n",name,barcode,price, productCategory);
     }
 
     public Long getId(){
@@ -81,7 +81,7 @@ public class Product {
         return barcode;
     }
 
-    public productCategory getCategory(){
+    public ProductCategory getCategory(){
         return productCategory;
     }
 
@@ -115,8 +115,9 @@ public class Product {
         this.stockQuantity = stockQuantity;
     }
 
-    public void setCategory(productCategory productCategory){
+    public void setCategory(ProductCategory productCategory){
         this.productCategory = productCategory;
     }
+
 
 }

@@ -26,5 +26,9 @@ public class ProductController {
         return productService.findById(id);
     }
 
+    public void updateProduct(Product product){
+        productService.update(product);
+    }
+
 
 }

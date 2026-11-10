@@ -3,7 +3,7 @@ package br.com.market.service;
 import br.com.market.dao.DaoFactory;
 import br.com.market.dao.ProductDao;
 import br.com.market.exceptions.ProductNotRegisterException;
-import br.com.market.exceptions.RegisteredAlreadyProductException;
+import br.com.market.exceptions.ProductAlreadyRegisteredException;
 import br.com.market.model.Product;
 import br.com.market.util.JPAUtil;
 import jakarta.persistence.EntityManager;
@@ -18,7 +18,7 @@ public class ProductService {
         try{
             em.getTransaction().begin();
             if(tool.isBarcodeCheckAvaliable(product)){
-                throw new RegisteredAlreadyProductException("Product Already Registered!");
+                throw new ProductAlreadyRegisteredException("Product Already Registered!");
             }
             tool.save(product); // tool = ferramenta
             em.getTransaction().commit();
@@ -26,7 +26,7 @@ public class ProductService {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
             }
-            throw new RegisteredAlreadyProductException("Product Already Cadastered In The System - "+e.getMessage());
+            throw new ProductAlreadyRegisteredException("Product Already Cadastered In The System - "+e.getMessage());
 
         }finally{
             if(em != null && em.isOpen()) {
@@ -72,6 +72,31 @@ public class ProductService {
         try(EntityManager em = JPAUtil.getEntityManager()){
             ProductDao<Product,Long> tool = DaoFactory.getHibernateProductDao(em);
             return tool.findById(idProduct);
+        }
+    }
+
+    public void update(Product product){
+        EntityManager em = JPAUtil.getEntityManager();
+        ProductDao<Product, Long> tool = DaoFactory.getHibernateProductDao(em);
+
+        try{
+            em.getTransaction().begin();
+
+            Optional<Product> optionalProduct = tool.findById(product.getId());
+            if(optionalProduct.isEmpty()){
+                throw new ProductNotRegisterException("Product Not Registered");
+            }
+            tool.update(product);
+            em.getTransaction().commit();
+        }catch(ProductNotRegisterException e){
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }finally{
+            if(em.isOpen()){
+                em.close();
+            }
         }
     }
 

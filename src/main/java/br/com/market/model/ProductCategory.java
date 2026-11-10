@@ -1,6 +1,6 @@
 package br.com.market.model;
 
-public enum productCategory {
+public enum ProductCategory {
 
     DRINK("Drink"), // -> Bebidas
     CLEANING("Cleaning"), // -> Limpeza
@@ -10,7 +10,7 @@ public enum productCategory {
 
     private final String category;
 
-    productCategory(String category){
+    ProductCategory(String category){
         this.category = category;
     }
 
