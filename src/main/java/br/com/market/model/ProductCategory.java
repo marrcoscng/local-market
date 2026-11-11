@@ -18,4 +18,8 @@ public enum ProductCategory {
         return category;
     }
 
+    public String toString(){
+        return category;
+    }
+
 }

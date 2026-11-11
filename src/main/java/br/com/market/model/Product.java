@@ -40,12 +40,15 @@ public class Product {
     public Product(){}
 
     public Product(String name, String barcode, BigDecimal price, BigDecimal constPrice, Integer stockQuantity, ProductCategory productCategory){
+        if(barcode == null || barcode.isBlank()){
+            throw new EmptyFieldException("Barcode is empty");
+        }
         setName(name);
         this.barcode = barcode;
-        this.price = price;
+        setPrice(price);
         setConstPrice(constPrice);
-        this.stockQuantity = stockQuantity;
-        this.productCategory = productCategory;
+        setStockQuantity(stockQuantity);
+        setCategory(productCategory);
     }
 
     @Override
@@ -54,7 +57,7 @@ public class Product {
                 "Name: %s%n"+
                 "BarCode: %s%n"+
                 "Price: %.2f%n"+
-                "ProductCategory: %s%n",name,barcode,price, productCategory);
+                "ProductCategory: %s%n",name,barcode,price, productCategory.toString());
     }
 
     public Long getId(){
@@ -118,6 +121,7 @@ public class Product {
     public void setCategory(ProductCategory productCategory){
         this.productCategory = productCategory;
     }
+
 
 
 }

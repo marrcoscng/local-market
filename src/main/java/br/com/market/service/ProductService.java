@@ -8,6 +8,7 @@ import br.com.market.model.Product;
 import br.com.market.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ProductService {
@@ -89,6 +90,36 @@ public class ProductService {
             tool.update(product);
             em.getTransaction().commit();
         }catch(ProductNotRegisterException e){
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }finally{
+            if(em.isOpen()){
+                em.close();
+            }
+        }
+    }
+
+    public List<Product> findAll(){
+        try(EntityManager em = JPAUtil.getEntityManager()){
+            ProductDao<Product,Long> tool = DaoFactory.getHibernateProductDao(em);
+            return tool.findAll();
+        }
+    }
+
+    public void deleteProduct(Product product){
+        EntityManager em = JPAUtil.getEntityManager();
+        ProductDao<Product, Long> tool = DaoFactory.getHibernateProductDao(em);
+        try{
+            Optional<Product> result = tool.findById(product.getId());
+            if(result.isEmpty()){
+                throw new ProductNotRegisterException("Product Not Found ");
+            }
+            em.getTransaction().begin();
+            tool.delete(product);
+            em.getTransaction().commit();
+        }catch(Exception e){
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
             }
